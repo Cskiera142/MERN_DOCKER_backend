@@ -52,7 +52,7 @@ const updateTask = asyncHandler(async (req, res) => {
   task.completed = completed;
 
   const updatedTask = await task.save();
-  expressAsyncHandler.json(`'${updatedTask.title}' updated`);
+  res.json(`'${updatedTask.title}' updated`);
 });
 
 // @desc Delete all tasks
@@ -63,7 +63,7 @@ const deleteTask = asyncHandler(async (req, res) => {
     return res.status(400).json({ message: "Note ID required" });
   }
 
-  const task = Task.findById(id).exec();
+  const task = await Task.findById(id).exec();
 
   if (!task) {
     return res.status(400).json({ message: "Task not found" });
