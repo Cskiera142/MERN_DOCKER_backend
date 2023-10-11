@@ -1,6 +1,5 @@
 const Task = require("../models/Task");
 const asyncHandler = require("express-async-handler");
-const expressAsyncHandler = require("express-async-handler");
 
 // @desc GET all tasks
 // @desc GET /tasks
@@ -55,8 +54,6 @@ const updateTask = asyncHandler(async (req, res) => {
   res.json(`'${updatedTask.title}' updated`);
 });
 
-// @desc Delete all tasks
-// @desc DELETE /tasks
 const deleteTask = asyncHandler(async (req, res) => {
   const { id } = req.body;
   if (!id) {
