@@ -23,6 +23,7 @@ app.use("/", express.static(path.join(__dirname, "public")));
 
 app.use("/", require("./routes/root"));
 app.use("/taskRoutes", require("./routes/taskRoutes.js"));
+app.use("/taskRoutes/:id", require("./routes/taskRoutes.js"));
 
 app.use(errorHandler);
 

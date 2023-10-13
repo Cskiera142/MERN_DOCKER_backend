@@ -1,8 +1,10 @@
 const Task = require("../models/Task");
+const express = require("express");
+const router = express.Router();
 const asyncHandler = require("express-async-handler");
 
 // @desc GET all tasks
-// @desc GET /tasks
+// @desc GET /taskRoutes
 const getAllTasks = asyncHandler(async (req, res) => {
   const tasks = await Task.find().lean();
 
@@ -14,7 +16,7 @@ const getAllTasks = asyncHandler(async (req, res) => {
 });
 
 // @desc Create task
-// @desc POST /tasks
+// @desc POST /taskRoutes/:id
 const createTask = asyncHandler(async (req, res) => {
   const { title, description } = req.body;
 
@@ -32,11 +34,11 @@ const createTask = asyncHandler(async (req, res) => {
 });
 
 // @desc update task
-// @desc PATCH /tasks
+// @desc PATCH /taskRoutes/:id
 const updateTask = asyncHandler(async (req, res) => {
   const { id, title, description, completed } = req.body;
 
-  if ((!id, !title || !description || typeof completed !== "boolean")) {
+  if (!id || !title || !description || typeof completed !== "boolean") {
     return res.status(400).json({ message: "All fields required" });
   }
 
@@ -51,13 +53,15 @@ const updateTask = asyncHandler(async (req, res) => {
   task.completed = completed;
 
   const updatedTask = await task.save();
-  res.json(`'${updatedTask.title}' updated`);
+  res.json({ message: `'${updatedTask.title}' updated` });
 });
 
+// @desc delete task
+// @desc DELETE /taskRoutes/:id
 const deleteTask = asyncHandler(async (req, res) => {
   const { id } = req.body;
   if (!id) {
-    return res.status(400).json({ message: "Note ID required" });
+    return res.status(400).json({ message: "Task ID required" });
   }
 
   const task = await Task.findById(id).exec();
