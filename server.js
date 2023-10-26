@@ -1,31 +1,30 @@
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
-const app = express();
 const path = require("path");
+const mongoose = require("mongoose");
+
 const errorHandler = require("./middleware/errorHandler");
 const connectDB = require("./config/dbConn");
-const mongoose = require("mongoose");
 const { logger, logEvents } = require("./middleware/logger");
+const rootRoutes = require("./routes/root");
+const taskRoutes = require("./routes/taskRoutes.js");
+
+const app = express();
 const PORT = process.env.PORT || 3500;
 
 console.log(process.env.NODE_ENV);
 
 app.use(cors());
+app.use(logger);
+app.use(express.json());
+app.use("/", express.static(path.join(__dirname, "public")));
+app.use("/", rootRoutes);
+app.use("/taskRoutes", taskRoutes);
+app.use("/taskRoutes/:id", taskRoutes);
+app.use(errorHandler);
 
 connectDB();
-
-app.use(logger);
-
-app.use(express.json());
-
-app.use("/", express.static(path.join(__dirname, "public")));
-
-app.use("/", require("./routes/root"));
-app.use("/taskRoutes", require("./routes/taskRoutes.js"));
-app.use("/taskRoutes/:id", require("./routes/taskRoutes.js"));
-
-app.use(errorHandler);
 
 mongoose.connection.once("open", () => {
   console.log("Connected to MongoDB");
