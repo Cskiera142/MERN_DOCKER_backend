@@ -53,7 +53,7 @@ const updateTask = asyncHandler(async (req, res) => {
   task.completed = completed;
 
   const updatedTask = await task.save();
-  res.json({ message: `'${updatedTask.title}' updated` });
+  res.json(updatedTask);
 });
 
 // @desc delete task
